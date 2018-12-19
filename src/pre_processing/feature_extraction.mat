@@ -1,0 +1,262 @@
+
+data = csvread('values_to_extract_features1');
+% [a,b] = xlsread('score.csv');
+
+fs = 100;
+
+r=1;
+psd_low_delta=[];
+for c=1:size(data,2)
+
+for i=1:100:length(data)
+% 	if mod(i,100000)==0;
+%     	disp([i,c]);
+% 	end
+if length(data)-i>200
+	% "Low  Delta (0.5 Hz - 2 Hz)
+	psd_low_delta(r,c)= bandpower(data(i:i+200,c), fs, [0.5,2]);
+
+	r=r+1;
+
+elseif length(data)-i>100
+	psd_low_delta(r,c)= bandpower(data(i-100:i+99,c), fs, [0.5,2]);
+% else
+% 	y(r,c)= bandpower(data(i:i+99,c), fs, [0.5,2])
+end
+end
+r=1;
+end
+
+csvwrite('psd_low_delta.csv',psd_low_delta)
+
+
+r=1;
+psd_Theta=[];
+for c=1:size(data,2)
+
+for i=1:100:length(data)
+	if mod(i,50000)==0;
+    	disp([i,c]);
+	end
+if length(data)-i>200
+	%  Theta (4 Hz - 8 Hz)
+	psd_Theta(r,c)= bandpower(data(i:i+200,c), fs, [4,8]);
+
+	r=r+1;
+
+elseif length(data)-i>100
+	psd_Theta(r,c)= bandpower(data(i-100:i+99,c), fs, [4,8]);
+% else
+% 	y(r,c)= bandpower(data(i:i+99,c), fs, [0.5,2])
+end
+end
+r=1;
+end
+
+csvwrite('psd_Theta.csv',psd_Theta)
+
+
+
+
+r=1;
+psd_high_delta=[];
+for c=1:size(data,2)
+
+for i=1:100:length(data)
+	if mod(i,50000)==0;
+    	disp([i,c]);
+	end
+if length(data)-i>200
+	%  High Delta (2 Hz – 4 Hz)
+	psd_high_delta(r,c)= bandpower(data(i:i+200,c), fs, [2,4]);
+
+	r=r+1;
+
+elseif length(data)-i>100
+	psd_high_delta(r,c)= bandpower(data(i-100:i+99,c), fs, [2,4]);
+% else
+% 	y(r,c)= bandpower(data(i:i+99,c), fs, [0.5,2])
+end
+end
+r=1;
+end
+
+csvwrite('psd_high_delta.csv',psd_high_delta)
+
+
+
+r=1;
+psd_Alpha=[];
+for c=1:size(data,2)
+
+for i=1:100:length(data)
+	if mod(i,50000)==0;
+    	disp([i,c]);
+	end
+if length(data)-i>200
+	%  Alpha (8 Hz - 12 Hz)
+	psd_Alpha(r,c)= bandpower(data(i:i+200,c), fs, [8,12]);
+
+	r=r+1;
+
+elseif length(data)-i>100
+	psd_Alpha(r,c)= bandpower(data(i-100:i+99,c), fs, [8,12]);
+% else
+% 	y(r,c)= bandpower(data(i:i+99,c), fs, [0.5,2])
+end
+end
+r=1;
+end
+
+csvwrite('psd_Alpha.csv',psd_Alpha)
+
+
+
+
+r=1;
+psd_Sigma=[];
+for c=1:size(data,2)
+
+for i=1:100:length(data)
+	if mod(i,50000)==0;
+    	disp([i,c]);
+	end
+if length(data)-i>200
+	%  Sigma (12 Hz - 15 Hz)
+	psd_Sigma(r,c)= bandpower(data(i:i+200,c), fs, [12,15]);
+
+	r=r+1;
+
+elseif length(data)-i>100
+	psd_Sigma(r,c)= bandpower(data(i-100:i+99,c), fs, [12,15]);
+% else
+% 	y(r,c)= bandpower(data(i:i+99,c), fs, [0.5,2])
+end
+end
+r=1;
+end
+
+csvwrite('psd_Sigma.csv',psd_Sigma)
+
+
+
+
+r=1;
+psd_Beta=[];
+for c=1:size(data,2)
+
+for i=1:100:length(data)
+	if mod(i,50000)==0;
+    	disp([i,c]);
+	end
+if length(data)-i>200
+	%  Beta (15 Hz - 30 Hz)
+	psd_Beta(r,c)= bandpower(data(i:i+200,c), fs, [15,30]);
+
+	r=r+1;
+
+elseif length(data)-i>100
+	psd_Beta(r,c)= bandpower(data(i-100:i+99,c), fs, [15,30]);
+% else
+% 	y(r,c)= bandpower(data(i:i+99,c), fs, [0.5,2])
+end
+end
+r=1;
+end
+
+csvwrite('psd_Beta.csv',psd_Beta)
+
+
+
+r=1;
+avg_power=[];
+for c=1:size(data,2)
+
+for i=1:100:length(data)
+
+if length(data)-i>200
+
+	% Average power
+	avg_power(r,c) = mean(data(i:i+200,c).^2);
+	r=r+1;
+
+elseif length(data)-i>100
+	avg_power(r,c) = mean(data(i-100:i+99,c).^2);
+end
+end
+r=1;
+end
+
+csvwrite('avg_power.csv',avg_power)
+
+
+r=1;
+entropy_shannon=[];
+for c=1:size(data,2)
+
+for i=1:100:length(data)
+
+if length(data)-i>200
+
+	% Shannon entropy
+	entropy_shannon(r,c) = wentropy(data(i:i+200,c),'shannon');
+	r=r+1;
+
+elseif length(data)-i>100
+	entropy_shannon(r,c)= wentropy(data(i-100:i+99,c),'shannon');
+
+end
+end
+r=1;
+end
+
+csvwrite('entropy_shannon.csv',entropy_shannon)
+
+
+
+r=1;
+stdev=[];
+for c=1:size(data,2)
+
+for i=1:100:length(data)
+
+if length(data)-i>200
+
+	% Average power
+	stdev(r,c) = std(data(i:i+200,c));
+	r=r+1;
+
+elseif length(data)-i>100
+	stdev(r,c) = std(data(i-100:i+99,c));
+end
+end
+r=1;
+end
+
+csvwrite('stdev.csv',stdev)
+
+
+r=1;
+entropy_logenergy=[];
+for c=1:size(data,2)
+
+for i=1:100:length(data)
+
+if length(data)-i>200
+
+	% Log-energy entropy
+	entropy_logenergy(r,c) = wentropy(data(i:i+200,c),'log energy');
+	r=r+1;
+
+elseif length(data)-i>100
+	entropy_logenergy(r,c)= wentropy(data(i-100:i+99,c),'log energy');
+
+end
+end
+r=1;
+end
+
+csvwrite('entropy_logenergy.csv',entropy_logenergy)
+
+
+
