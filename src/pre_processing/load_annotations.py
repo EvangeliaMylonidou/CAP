@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-def load_data():
+def load_annotations():
     # Load annotation file
     annotations = pd.read_csv('data/PhysioNet - The CAP Database/n1.txt', header=None)
 

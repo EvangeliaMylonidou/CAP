@@ -1,0 +1,38 @@
+1) PSD/Power Spectral Density (in alpha, beta, (high + low) delta, theta, sigma bands) **
+"    Low  Delta (0.5 Hz - 2 Hz)
+     High Delta (2 Hz – 4 Hz)
+     Theta (4 Hz - 8 Hz)
+     Alpha (8 Hz - 12 Hz)
+     Sigma (12 Hz - 15 Hz)
+     and Beta (15 Hz - 30 Hz)
+"
+
+2) Shannon entropy **
+
+3) Spectral entropy
+
+4) Kolmogorov entropy
+
+5) Sample entropy
+
+6) Tesallis entropy
+
+7) Higuchi Fractal Dimension
+
+8) Band features with Kolmogorov entropy
+
+9) Hjorth activity (in low and high delta bands)
+
+10) Differential variance (raw EEG signal)
+
+11) Average power **
+
+12) Standard deviation **
+
+13) Standard variation
+
+14) Autocovariance
+
+15) Log-energy entropy **
+
+16) Teager energy operator  (TEO)
