@@ -1,7 +1,6 @@
 # CAP - Cyclic Alternating Pattern
 
-A Twitter scraper that scrapes the 1000 most recent tweets that contain a specific keyword hash-tag value that is 
-contained in a keyword list.
+A thesis project for the identification and classification of the sleep micro-structure, by using machine learning methods.
 
 ## Getting Started
 
@@ -9,18 +8,24 @@ These instructions will help you install and run the project on your local machi
 
 ### Prerequisites
 
-**Python 3.7** 
+**Python 3.6** 
 
-**SciPy v1.2.0**: For creating a web service
-
-```
-pip install Flask
-```
-
-**Tweepy 3.7.0**: For scraping Twitter
+**Numpy v1.14.3**:
 
 ```
-pip install tweepy
+pip install numpy
+```
+
+**Pandas v0.23.4**:
+
+```
+pip install pandas
+```
+
+**MNE v0.16.2**:
+ 
+```
+pip install mne
 ```
 
 ### Run
@@ -28,11 +33,3 @@ pip install tweepy
 ```
 python app.py
 ```
-
-The service starts by default on port **5000** and **/scrape** is the service endpoint in order to start scraping. 
-For example if you run it on your local machine, the full URL will be:
-
-```
-localhost:5000/scrape
-```
-
