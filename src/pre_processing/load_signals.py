@@ -5,7 +5,7 @@ import mne
 
 def sampling():
     # Change sampling frequency from 512Hz to 105Hz
-    """ It takes every 5 lines: 512/5 = 102.5 pre second for 100Hz - re-sampling """
+    """ It takes every 5 lines: 512/5 = 102.5 per second for 100Hz - re-sampling """
     skip_rows = [row for row in range(start=107520, stop=17710592) if row % 5 != 0]
     # Load signals from data file
     data_frame_data = pd.read_csv('n1.csv', skiprows=skip_rows, sep=';')

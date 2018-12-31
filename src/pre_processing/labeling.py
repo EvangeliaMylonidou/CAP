@@ -10,7 +10,7 @@ print(f)
 k = []
 c = 209
 h = []
-lab = []
+lab = []  # Label
 
 for i in range(0, len(score), 105):
     if 209 < (len(score) - i):
