@@ -48,7 +48,7 @@ def load_annotations():
             annotations_data_frame[i] = L
         L = []
 
-    a = list(d1['Scoring'])
+    a = list(df['Scoring'])
 
     print(a[33800:34100])
 
@@ -101,7 +101,8 @@ def find_a_phases(annotations_data_frame, signal_data_frame):
     
     signal_data_frame['SS'] = pd.read_csv('SS.csv')
     '''
-    signal_data_frame['time'] = signal_data_frame['HH'].apply(str) + ":" + signal_data_frame['MM'].apply(str) + ":" + \
+    signal_data_frame['time'] = signal_data_frame['HH'].apply(str) + ":" + \
+                                signal_data_frame['MM'].apply(str) + \
                                 signal_data_frame['SS'].apply(str)
 
     new_time = []
@@ -129,6 +130,7 @@ def find_a_phases(annotations_data_frame, signal_data_frame):
     # Convert time to timestamp
 
     A_phases_time = []
+
 
 
     for i in times:
