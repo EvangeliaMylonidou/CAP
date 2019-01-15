@@ -5,12 +5,14 @@ import numpy as np
 def create_data_set(signals, annotations):
     print('Creating data-set...')
 
-    print(list(signals))
-    print(list(annotations))
+    print(signals.iloc[:, 0].values)
+    print(annotations.iloc[:, 0].values)
 
-    data_set = pd.merge_asof(signals[['Datetime', 'F2-F4[uV]', 'F4-C4[uV]', 'F1-F3[uV]']],
-                             annotations[['Datetime', 'Sleep Stage', 'Event', 'Duration[s]']],
-                             left_on='Datetime', right_on='Datetime', by='Datetime')
+    signals['Datetime'] = pd.to_datetime(signals.Datetime)
+    annotations['Datetime'] = pd.to_datetime(annotations.Datetime)
+
+    # pd.merge_asof(signals, annotations, by='Datetime')
+    data_set = pd.merge_asof(left=signals, right=annotations, on='Datetime')
 
     print('Creating data-set...Done')
     return data_set
@@ -40,7 +42,7 @@ def find(signals, annotations):
         while signals['Time [hh:mm:ss]'][j] != annotations['Time [hh:mm:ss]'][i]:
             an.append(annotations['Duration[s]'][i - 1])
         j = j + 1
-        print(j, ' ', i, ' ', annotations['Duration[s]'][i - 1])
+        print(j,  i, ' ', annotations['Duration[s]'][i - 1])
         an.append(annotations['Duration[s]'][i])
         j = j + 1
 

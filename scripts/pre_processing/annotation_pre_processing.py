@@ -21,7 +21,6 @@ def _load_annotations(file_name):
     # Load the annotations from a file and save them into a DataFrame
     # Remove the column named 'Position' because it is irrelevant.
     annotations = pd.read_csv(file_name, sep='\t', skiprows=21).drop(columns=['Position'], axis=1)
-
     print('\tLoad annotations file...Done')
 
     return annotations
@@ -62,15 +61,15 @@ def _get_annotation_recording_dates(file_name):
 
 def _concatenate_annotation_date_and_time(annotations_time, recording_dates):
     print('\t\tConcatenate annotations date and time...')
-
-    start_date = recording_dates['start_date']
-    end_date = recording_dates['end_date']
+    date_time = []
+    date = recording_dates['start_date']
     midnight = '00:00:00'
 
-    date_time = [("{} {}".format(start_date, str(annotations_time[i])))
-                 if annotations_time[i].split(':')[0] == midnight.split(':')[0]
-                 else ("{} {}".format(end_date, str(annotations_time[i])))
-                 for i in range(len(annotations_time))]
+    for i in range(len(annotations_time)):
+        if annotations_time[i].split(':')[0] == midnight.split(':')[0] and date != recording_dates['end_date']:
+            date = recording_dates['end_date']
+
+        date_time.append("{} {}".format(date, str(annotations_time[i])))
 
     print('\t\tConcatenate annotations date and time...Done')
     return date_time

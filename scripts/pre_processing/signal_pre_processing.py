@@ -38,7 +38,7 @@ def _load_signals(file_name):
     print('\tLoad signals file...')
 
     # Load the signals from a file and save them into a DataFrame.
-    signals = pd.read_csv(file_name, sep='\t', nrows=1000)
+    signals = pd.read_csv(file_name, sep='\t')
 
     print('\tLoad signals file...Done')
     return signals
@@ -66,8 +66,8 @@ def _create_signal_datetime_structure(signals):
 
 def _concatenate_signal_date_and_time(signals_dates, time):
     print('\t\tConcatenate signal date and time...')
-    # date_time = ["{} {}".format(date_, time_) for date_, time_ in zip(signals_dates, time)]
-    date_time = "{} {}".format(signals_dates, time)
+    date_time = ["{} {}".format(date_, time_) for date_, time_ in zip(signals_dates, time)]
+
     print('\t\tConcatenate signal date and time...Done')
     return date_time
 

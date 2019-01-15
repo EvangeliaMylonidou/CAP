@@ -19,14 +19,15 @@ def main():
     # ============================== PRE-PROCESSING ==============================
     print('============================ ANNOTATIONS =============================')
     annotations = load_annotations(file_name=annotations_txt)
-    # save_annotations(annotations)
 
     print('============================== SIGNALS ===============================')
     signals = load_signals(file_name=signals_csv)
-    # save_signals(signals)
 
     print('============================= DATA-SET ===============================')
-    create_data_set(annotations=annotations, signals=signals)
+    data_set = create_data_set(signals=signals[['Datetime', 'F2-F4[uV]', 'F4-C4[uV]', 'F1-F3[uV]']],
+                               annotations=annotations[['Datetime', 'Sleep Stage', 'Event', 'Duration[s]']])
+    print(data_set)
+    save_data_set(data_set)
 
     print(datetime.now() - start_time)
 
@@ -48,6 +49,10 @@ def save_signals(signals):
 
 def save_annotations(annotations):
     annotations.to_csv(modified_annotations_txt, index=False)
+
+
+def save_data_set(data_set):
+    data_set.to_csv(data_set_csv, index=False)
 
 
 if __name__ == "__main__":
