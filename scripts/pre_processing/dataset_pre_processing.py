@@ -1,65 +1,101 @@
 import pandas as pd
 import numpy as np
 
+from datetime import datetime
+from scipy import signal
+from window_slider import Slider
 
-def create_data_set(signals, annotations):
+
+def load_data_set(signals, annotations):
+    print('Loading data-set...')
+    data_set = _create_data_set(signals=signals, annotations=annotations)
+    data_set = _fill_data_set(data_set)
+
+    data_set = _re_sampling(data_set)
+    print(data_set)
+
+    _windowing(data_set)
+    # print(data_set)
+
+    print('Loading data-set...Done')
+    return data_set
+
+
+def _create_data_set(signals, annotations):
     print('Creating data-set...')
-
-    print(signals.iloc[:, 0].values)
-    print(annotations.iloc[:, 0].values)
 
     signals['Datetime'] = pd.to_datetime(signals.Datetime)
     annotations['Datetime'] = pd.to_datetime(annotations.Datetime)
-
-    # pd.merge_asof(signals, annotations, by='Datetime')
     data_set = pd.merge_asof(left=signals, right=annotations, on='Datetime')
 
     print('Creating data-set...Done')
     return data_set
 
 
-def fill_data_set(data_set):
+def _fill_data_set(data_set):
     print('Filling data-set...')
-    # data_set = data_set.c(method='ffill', inplace=True)
 
-    # Fill the empty rows of the 'Event' column with the previous value
-    data_set[data_set['Event'] == ""] = np.NaN
+    # Replace the empty cells of the 'Event' column with NaNs
+    data_set[data_set['Event'] == ''] = np.NaN
+
+    # Fill the empty cells of the 'Event' column with the previous value
     data_set.fillna(method='ffill')
-    print(data_set)
 
     # Drop data that have no annotations
-    # data_set['Event'].dropna()
+    data_set = data_set.dropna()
 
     print('Filling data-set...Done')
+    return data_set
 
 
-def find(signals, annotations):
-    print('Find...')
+def _convert_datetime_to_timestamp(date_time):
+    print('\t\tConverting datetime to timestamp...')
 
-    j = 0
-    an = []
-    for i in range(1, len(annotations['Time [hh:mm:ss]'])):
-        while signals['Time [hh:mm:ss]'][j] != annotations['Time [hh:mm:ss]'][i]:
-            an.append(annotations['Duration[s]'][i - 1])
-        j = j + 1
-        print(j,  i, ' ', annotations['Duration[s]'][i - 1])
-        an.append(annotations['Duration[s]'][i])
-        j = j + 1
+    timestamp = [datetime.strptime(datetime_, '%Y/%m/%d %H:%M:%S').timestamp() for datetime_ in date_time]
 
-    signals['Scoring'] = an
-    d1 = an
+    print('\t\tConverting datetime to timestamp...Done')
+    return timestamp
 
-    signals['Scoring'] = d1
-    signals['Scoring'].to_csv('d1', index=False)
 
-    signals.to_csv('D:\\liamylo\\Documents\\BSc Thesis\\CAP project\\data\\signals\\whole_dataset', index=False)
-    signals = signals.drop(['Unnamed: 0', 'HH', 'MM', 'SS'], axis=1)
-    # Rearrange columns
-    signals = signals[['Date', 'Time [hh:mm:ss]', 'F4-C4[uV]', 'F3-C3[uV]', 'Scoring']]
+def _convert_timestamp_to_datetime(timestamp):
+    print('\t\tConverting datetime to timestamp...')
 
-    signals.to_csv('D:\\liamylo\\Documents\\BSc Thesis\\CAP project\\data\\signals\\final.csv', index=False)
+    date_time = [datetime.utcfromtimestamp(timestamp_).strftime('%Y/%m/%d %H:%M:%S')
+                 for timestamp_ in timestamp]
 
-    signals = signals.drop(['Date', 'Time [hh:mm:ss]', 'Scoring'], axis=1)
-    signals.to_csv('Professor', index=False, header=None)
+    print('\t\tConverting datetime to timestamp...Done')
+    return date_time
 
-    list(signals['Time [hh:mm:ss]']).index('07:34:13')
+
+def _re_sampling(data_set):
+    print('\tRe-sampling...')
+
+    freq_100_hz = 512 / 100
+    total_amount_of_signals = len(data_set) / freq_100_hz
+
+    re_sampled_data = signal.resample(data_set, int(total_amount_of_signals))
+    data_set = pd.DataFrame(re_sampled_data, columns=list(data_set))
+
+    print('\tRe-sampling...Done')
+    return data_set
+
+
+def _windowing(data_set):
+    print('\tWindowing...')
+
+    bucket_size = 2
+    overlap_count = 1
+
+    slider = Slider(bucket_size, overlap_count)
+    slider.fit(np.asarray(data_set))
+
+    while True:
+        window_data = slider.slide()
+        if slider.reached_end_of_list():
+            break
+
+    print(data_set.head())
+    signals = pd.DataFrame(window_data)
+    print(signals.head())
+
+    print('\tWindowing...Done')

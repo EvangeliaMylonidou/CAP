@@ -1,6 +1,7 @@
 import pandas as pd
-import numpy as np
-import mne
+
+
+SIGNAL_COLUMNS = ['Date', 'HH', 'MM', 'SS', 'F2-F4[uV]', 'F4-C4[uV]', 'F1-F3[uV]']
 
 
 def load_signals(file_name):
@@ -15,16 +16,15 @@ def load_signals(file_name):
     # Load the signals from a file and save them into a DataFrame.
     signals = _load_signals(file_name)
 
-    signals = _create_signal_datetime_structure(signals)
+    # Change the signal datetime structure and return the changed DataFrame
+    signals = _create_datetime_structure(signals)
 
-    '''
     # Change the sampling frequency
-    signals = _re_sampling(file_name, len(signals))
+    # signals = _re_sampling(signals)
 
-    # Apply band-pass filter.
-    raw_object = _apply_band_pass_filter(signals)
-    print(raw_object)
-    '''
+    # date_time = _convert_timestamp_to_datetime(signals['Datetime'])
+    # signals['Datetime'] = date_time
+
     print('Loading signals...Done')
     return signals
 
@@ -38,20 +38,20 @@ def _load_signals(file_name):
     print('\tLoad signals file...')
 
     # Load the signals from a file and save them into a DataFrame.
-    signals = pd.read_csv(file_name, sep='\t')
+    signals = pd.read_csv(file_name, sep='\t', usecols=SIGNAL_COLUMNS, nrows=135000)
 
     print('\tLoad signals file...Done')
     return signals
 
 
-def _create_signal_datetime_structure(signals):
+def _create_datetime_structure(signals):
     print('\tCreating signal datetime structure...')
 
     # Modify the time and change it to HH:MM:SS format.
-    time = _concatenate_signal_time(signals[['HH', 'MM', 'SS']])
+    time = _concatenate_time(signals[['HH', 'MM', 'SS']])
 
     # Combine Date and Time in one column.
-    date_time = _concatenate_signal_date_and_time(signals['Date'], time)
+    date_time = _concatenate_date_and_time(signals['Date'], time)
 
     # Insert column Datetime in the first column of the DataFrame
     signals.insert(loc=0, column='Datetime', value=date_time)
@@ -64,15 +64,7 @@ def _create_signal_datetime_structure(signals):
     return signals
 
 
-def _concatenate_signal_date_and_time(signals_dates, time):
-    print('\t\tConcatenate signal date and time...')
-    date_time = ["{} {}".format(date_, time_) for date_, time_ in zip(signals_dates, time)]
-
-    print('\t\tConcatenate signal date and time...Done')
-    return date_time
-
-
-def _concatenate_signal_time(signals_time):
+def _concatenate_time(signals_time):
     print('\t\tConcatenate signal time structure...')
 
     hours = signals_time.iloc[:, 0].values
@@ -87,37 +79,10 @@ def _concatenate_signal_time(signals_time):
     return time
 
 
-def _re_sampling(file_name, signals_length):
-    print('\tRe-sampling...')
-    # Change sampling frequency from 512Hz to 128Hz -> 512/4 = 128.
-    skip_rows = [row for row in range(signals_length) if row % 4 != 0]
+def _concatenate_date_and_time(signals_dates, time):
+    print('\t\tConcatenate signal date and time...')
+    date_time = ["{} {}".format(date_, time_) for date_, time_ in zip(signals_dates, time)]
 
-    # Load signals file again but with skipping the above mentioned rows.
-    signals = pd.read_csv(file_name, sep='\t', skiprows=skip_rows)
+    print('\t\tConcatenate signal date and time...Done')
+    return date_time
 
-    print('\tRe-sampling...Done')
-    return signals
-
-
-def _apply_band_pass_filter(signals):
-    print('\tApplying Band-Pass Filter...')
-
-    # Apply band-pass filter
-    signals_array = np.array([signals['F2-F4[uV]'], signals['F4-C4[uV]'], signals['F1-F3[uV]']])
-
-    # Create a list with the channel names
-    channel_names = ['F2-F4[uV]', 'F4-C4[uV]', 'F1-F3[uV]']
-    # Channel types are all EEG
-    channel_types = 'eeg'
-    # Sampling rate
-    sampling_frequency = 128  # Hz
-
-    # Create the info-structure needed for our object with MNE
-    info_structure = mne.create_info(ch_names=channel_names, sfreq=sampling_frequency, ch_types=channel_types)
-
-    # Create raw object
-    # Band-pass filter, it takes frequencies from 0.05 - 30Hz.
-    raw = mne.io.RawArray(signals_array, info_structure).filter(0.05, 30)
-
-    print('\tApplying Band-Pass Filter...Done')
-    return raw

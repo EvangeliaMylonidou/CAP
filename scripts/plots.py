@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import mne
 import numpy as np
 
 
@@ -84,3 +85,22 @@ def plot_amount_of_annotations(annotations):
     plt.plot(9, count_srem, '*', color='navy')
     plt.plot(10, count_unscored, '*', color='black')
     plt.show()
+
+
+def plot_re_sampled_signals(epochs, epochs_re_sampled):
+    # Plot a piece of data to see the effects of down-sampling
+    plt.figure(figsize=(7, 3))
+
+    n_samples_to_plot = int(0.5 * epochs.info['sfreq'])  # plot 0.5 seconds of data
+    plt.plot(epochs.times[:n_samples_to_plot],
+             epochs.get_data()[0, 0, :n_samples_to_plot], color='black')
+
+    n_samples_to_plot = int(0.5 * epochs_re_sampled.info['sfreq'])
+    plt.plot(epochs_re_sampled.times[:n_samples_to_plot],
+             epochs_re_sampled.get_data()[0, 0, :n_samples_to_plot],
+             '-o', color='red')
+
+    plt.xlabel('time (s)')
+    plt.legend(['original', 'down-sampled'], loc='best')
+    plt.title('Effect of down-sampling')
+    mne.viz.tight_layout()
