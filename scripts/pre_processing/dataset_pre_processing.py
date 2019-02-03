@@ -1,22 +1,13 @@
 import pandas as pd
 import numpy as np
 
-from datetime import datetime
-from scipy import signal
-from window_slider import Slider
-
 
 def load_data_set(signals, annotations):
     print('Loading data-set...')
     data_set = _create_data_set(signals=signals, annotations=annotations)
     data_set = _fill_data_set(data_set)
 
-    data_set = _re_sampling(data_set)
     print(data_set)
-
-    _windowing(data_set)
-    # print(data_set)
-
     print('Loading data-set...Done')
     return data_set
 
@@ -30,6 +21,29 @@ def _create_data_set(signals, annotations):
 
     print('Creating data-set...Done')
     return data_set
+
+
+def _create_data_set2(signals, annotations):
+    print('Creating data-set...')
+
+    t = pd.Series()
+
+    for signal in range(107519, len(signals['Datetime'])):
+
+        for annotation in range(len(annotations['Datetime'])):
+            print(signals['Datetime'][signal], ' == ', annotations['Datetime'][annotation])
+            if signals['Datetime'][signal] == annotations['Datetime'][annotation]:
+                print('signal = {}, annotation = {}'.format(signal, annotation))
+                print('t = ', annotations['Event'][annotation])
+                print(signal)
+                t.append(annotations['Event'][annotation])
+            break
+
+    signals['Event'] = pd.Series(t, index=signals.index)
+    print(signals.head())
+
+    print('Creating data-set...Done')
+    return signals
 
 
 def _fill_data_set(data_set):
@@ -46,56 +60,3 @@ def _fill_data_set(data_set):
 
     print('Filling data-set...Done')
     return data_set
-
-
-def _convert_datetime_to_timestamp(date_time):
-    print('\t\tConverting datetime to timestamp...')
-
-    timestamp = [datetime.strptime(datetime_, '%Y/%m/%d %H:%M:%S').timestamp() for datetime_ in date_time]
-
-    print('\t\tConverting datetime to timestamp...Done')
-    return timestamp
-
-
-def _convert_timestamp_to_datetime(timestamp):
-    print('\t\tConverting datetime to timestamp...')
-
-    date_time = [datetime.utcfromtimestamp(timestamp_).strftime('%Y/%m/%d %H:%M:%S')
-                 for timestamp_ in timestamp]
-
-    print('\t\tConverting datetime to timestamp...Done')
-    return date_time
-
-
-def _re_sampling(data_set):
-    print('\tRe-sampling...')
-
-    freq_100_hz = 512 / 100
-    total_amount_of_signals = len(data_set) / freq_100_hz
-
-    re_sampled_data = signal.resample(data_set, int(total_amount_of_signals))
-    data_set = pd.DataFrame(re_sampled_data, columns=list(data_set))
-
-    print('\tRe-sampling...Done')
-    return data_set
-
-
-def _windowing(data_set):
-    print('\tWindowing...')
-
-    bucket_size = 2
-    overlap_count = 1
-
-    slider = Slider(bucket_size, overlap_count)
-    slider.fit(np.asarray(data_set))
-
-    while True:
-        window_data = slider.slide()
-        if slider.reached_end_of_list():
-            break
-
-    print(data_set.head())
-    signals = pd.DataFrame(window_data)
-    print(signals.head())
-
-    print('\tWindowing...Done')

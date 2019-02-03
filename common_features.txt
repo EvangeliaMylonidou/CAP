@@ -1,11 +1,10 @@
 1) PSD/Power Spectral Density (in alpha, beta, (high + low) delta, theta, sigma bands) **
-"    Low  Delta (0.5 Hz - 2 Hz)
+     Low  Delta (0.5 Hz - 2 Hz)
      High Delta (2 Hz – 4 Hz)
      Theta (4 Hz - 8 Hz)
      Alpha (8 Hz - 12 Hz)
      Sigma (12 Hz - 15 Hz)
      and Beta (15 Hz - 30 Hz)
-"
 
 2) Shannon entropy **
 

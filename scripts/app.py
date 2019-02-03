@@ -1,13 +1,14 @@
 from scripts.pre_processing.annotation_pre_processing import load_annotations
 from scripts.pre_processing.signal_pre_processing import load_signals
 from scripts.pre_processing.dataset_pre_processing import load_data_set
+from scripts.plots import *
+from scripts.model import *
 
 from datetime import datetime
 
 
-ANNOTATIONS_TXT = 'D:\\liamylo\\Documents\\BSc Thesis\\CAP project\\data\\annotations\\n1.txt'
-SIGNALS_CSV = 'D:\\liamylo\\Documents\\BSc Thesis\\CAP project\\data\\signals\\n1_512Hz.csv'
-SIGNALS_EDF = 'D:\\liamylo\\Documents\\BSc Thesis\\CAP project\\data\\edf\\n1.edf'
+ANNOTATIONS_TXT = 'D:\\liamylo\\Documents\\BSc Thesis\\Data\\Annotations\\n1.txt'
+SIGNALS_CSV = 'D:\\liamylo\\Documents\\BSc Thesis\\Data\\Signals\\n1_512Hz.csv'
 
 
 def main():
@@ -18,13 +19,29 @@ def main():
     print('============================== SIGNALS ===============================')
     signals = load_signals(file_name=SIGNALS_CSV)
 
+    #
+
+    #
+
+    #
+
+    #
+
+    #
+
+    #
+
+    #
+
     print('============================= DATA-SET ===============================')
     data_set = load_data_set(signals=signals,
-                             annotations=annotations[['Datetime', 'Sleep Stage', 'Event', 'Duration[s]']])
-    print(data_set)
+                             annotations=annotations[['Datetime', 'Event', 'Duration[s]']])
+    # plot_data_classes(data_set)
     # save_data_set(data_set)
 
     # ================================== MODEL ===================================
+    print('============================== MODEL =================================')
+
     print('============================= FINISHED ===============================')
 
 

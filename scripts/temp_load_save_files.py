@@ -1,9 +1,8 @@
 import pandas as pd
 
-MODIFIED_SIGNALS_CSV = 'D:\\liamylo\\Documents\\BSc Thesis\\CAP project\\data\\signals\\n1_signals_pre_processed.csv'
-MODIFIED_ANNOTATIONS_TXT = 'D:\\liamylo\\Documents\\BSc Thesis\\CAP ' \
-                           'project\\data\\signals\\n1_annotations_pre_processed.txt '
-DATA_SET_CSV = 'D:\\liamylo\\Documents\\BSc Thesis\\CAP project\\data\\signals\\data_set.csv'
+MODIFIED_SIGNALS_CSV = 'D:\\liamylo\\Documents\\BSc Thesis\\Data\\Pre-processed\\n1_signals_pre_processed.csv'
+MODIFIED_ANNOTATIONS_TXT = 'D:\\liamylo\\Documents\\BSc Thesis\\Data\\Pre-processed\\n1_annotations_pre_processed.txt '
+DATA_SET_CSV = 'D:\\liamylo\\Documents\\BSc Thesis\\Data\\Pre-processed\\data_set.csv'
 
 
 def load_signals_second_time():

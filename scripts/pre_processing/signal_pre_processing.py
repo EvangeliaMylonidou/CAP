@@ -1,4 +1,9 @@
+import numpy as np
 import pandas as pd
+
+from scipy import signal
+from scripts.pre_processing.signal_time_structure \
+    import create_datetime_structure, _to_timestamp, _to_datetime
 
 
 SIGNAL_COLUMNS = ['Date', 'HH', 'MM', 'SS', 'F2-F4[uV]', 'F4-C4[uV]', 'F1-F3[uV]']
@@ -20,10 +25,12 @@ def load_signals(file_name):
     signals = _create_datetime_structure(signals)
 
     # Change the sampling frequency
-    # signals = _re_sampling(signals)
+    signals = _re_sampling(signals)
 
-    # date_time = _convert_timestamp_to_datetime(signals['Datetime'])
-    # signals['Datetime'] = date_time
+    # Windowing every 2 minutes with 1 minute overlap.
+    # _windowing(signals)
+
+    # Windowing every 2 minutes without overlap.
 
     print('Loading signals...Done')
     return signals
@@ -44,45 +51,53 @@ def _load_signals(file_name):
     return signals
 
 
-def _create_datetime_structure(signals):
-    print('\tCreating signal datetime structure...')
+def _re_sampling(signals):
+    print('\tRe-sampling...')
 
-    # Modify the time and change it to HH:MM:SS format.
-    time = _concatenate_time(signals[['HH', 'MM', 'SS']])
+    print(signals)
+    signals['Datetime'] = _to_timestamp(signals['Datetime'])
 
-    # Combine Date and Time in one column.
-    date_time = _concatenate_date_and_time(signals['Date'], time)
+    freq_100_hz = 512 / 100
+    total_amount_of_signals = len(signals) / freq_100_hz
 
-    # Insert column Datetime in the first column of the DataFrame
-    signals.insert(loc=0, column='Datetime', value=date_time)
+    re_sampled_data = signal.resample(signals, int(total_amount_of_signals))
 
-    # Delete columns Date, 'HH', 'MM', 'SS'] because they are no longer needed,
-    # they are replaced with the column: Datetime
-    signals.drop(columns=['Date', 'HH', 'MM', 'SS'], axis=1, inplace=True)
+    signals = pd.DataFrame(re_sampled_data, columns=list(signals))
 
-    print('\tCreating signal datetime structure...Done')
+    signals['Datetime'] = _to_datetime(signals['Datetime'])
+    print(signals)
+
+    print('\tRe-sampling...Done')
     return signals
 
 
-def _concatenate_time(signals_time):
-    print('\t\tConcatenate signal time structure...')
+def _re_sampling_with_shuffle(signals):
+    print('\tRe-sampling...')
 
-    hours = signals_time.iloc[:, 0].values
-    minutes = signals_time.iloc[:, 1].values
-    seconds = signals_time.iloc[:, 2].values
+    freq_100_hz = 512 / 100
+    total_amount_of_signals = len(signals) / freq_100_hz
 
-    time = ["{}:{}:{}".format(hour_, minute_, second_) for hour_, minute_, second_ in zip(hours, minutes, seconds)]
+    re_sampled_data = []  # resample(signals)
 
-    time = pd.Series(pd.to_datetime(time, format='%H:%M:%S.%f'), index=None).dt.strftime('%H:%M:%S')
+    print(signals.__len__(), re_sampled_data.__len__())
+    print(re_sampled_data)
 
-    print('\t\tConcatenate signal time structure...Done')
-    return time
+    print('\tRe-sampling...Done')
+    return re_sampled_data
 
 
-def _concatenate_date_and_time(signals_dates, time):
-    print('\t\tConcatenate signal date and time...')
-    date_time = ["{} {}".format(date_, time_) for date_, time_ in zip(signals_dates, time)]
+def _windowing(signals):
+    print('\tWindowing...')
 
-    print('\t\tConcatenate signal date and time...Done')
-    return date_time
+    print(signals.__len__())
+    window_size = 200
+    overlap_size = window_size/2
 
+    window = np.kaiser(M=200, beta=0)
+    print(window, window.__len__())
+
+    print('\tWindowing...Done')
+
+
+def _create_datetime_structure(signals):
+    return create_datetime_structure(signals)
