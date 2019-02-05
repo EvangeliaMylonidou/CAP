@@ -7,7 +7,6 @@ import pandas as pd
 def create_datetime_structure(signals):
     print('\tCreating signal datetime structure...')
 
-    print(signals[['Date', 'HH', 'MM', 'SS']])
     # Combine date and time, into a YYYY/MM/DD HH:MM:SS format and place them in one column.
     date_time = _create_datetime(signals[['Date', 'HH', 'MM', 'SS']])
 
@@ -17,7 +16,6 @@ def create_datetime_structure(signals):
     # Delete columns [Date, 'HH', 'MM', 'SS'] and replace them by the column: Datetime
     signals.drop(columns=['Date', 'HH', 'MM', 'SS'], axis=1, inplace=True)
 
-    print(signals['Datetime'])
     print('\tCreating signal datetime structure...Done')
     return signals
 

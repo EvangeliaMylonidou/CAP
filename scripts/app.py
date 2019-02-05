@@ -15,6 +15,7 @@ def main():
     # ============================== PRE-PROCESSING ==============================
     print('============================ ANNOTATIONS =============================')
     annotations = load_annotations(file_name=ANNOTATIONS_TXT)
+    # plot(annotations)
 
     print('============================== SIGNALS ===============================')
     signals = load_signals(file_name=SIGNALS_CSV)
@@ -34,8 +35,8 @@ def main():
     #
 
     print('============================= DATA-SET ===============================')
-    data_set = load_data_set(signals=signals,
-                             annotations=annotations[['Datetime', 'Event', 'Duration[s]']])
+    # data_set = load_data_set(signals=signals,
+    #                         annotations=annotations[['Datetime', 'Event', 'Duration[s]']])
     # plot_data_classes(data_set)
     # save_data_set(data_set)
 

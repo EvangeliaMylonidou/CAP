@@ -28,7 +28,7 @@ def load_signals(file_name):
     signals = _re_sampling(signals)
 
     # Windowing every 2 minutes with 1 minute overlap.
-    # _windowing(signals)
+    _windowing(signals)
 
     # Windowing every 2 minutes without overlap.
 
@@ -54,59 +54,37 @@ def _load_signals(file_name):
 def _re_sampling(signals):
     print('\tRe-sampling...')
 
-    print(signals)
-    signals['Datetime'] = _to_timestamp(signals['Datetime'])
-
     freq_100_hz = 512 / 100
-    total_amount_of_signals = len(signals) / freq_100_hz
 
-    re_sampled_data = signal.resample(signals, int(total_amount_of_signals))
-
-    signals = pd.DataFrame(re_sampled_data, columns=list(signals))
-
-    signals['Datetime'] = _to_datetime(signals['Datetime'])
-    print(signals)
-
-    print('\tRe-sampling...Done')
-    return signals
-
-
-def _re_sampling_with_shuffle(signals):
-    print('\tRe-sampling...')
-
-    freq_100_hz = 512 / 100
-    total_amount_of_signals = len(signals) / freq_100_hz
-
-    re_sampled_data = []  # resample(signals)
-
-    print(signals.__len__(), re_sampled_data.__len__())
-    print(re_sampled_data)
+    re_sampled_data = np.asarray(signals)[0::int(freq_100_hz), :]
+    # signals = pd.DataFrame(re_sampled_data, columns=list(signals)])
 
     print('\tRe-sampling...Done')
     return re_sampled_data
 
 
-data = [['1996/07/03 11:40:35', -23.3455, 24.5534, -325.653],
-        ['1996/07/03 11:40:35', 23.3465, -24.5444, 325.653],
-        ['1996/07/03 11:40:35', -23.3455, -24.5564, 325.653],
-        ['1996/07/03 11:40:36', 23.3455, 24.5534, 325.666],
-        ['1996/07/03 11:40:36', -23.3444, -24.5534, -3254.653],
-        ['1996/07/03 11:40:36', 23.3456, 24.5534, 325.653],
-        ['1996/07/03 11:40:36', -23.3455, 24.5534, -325.653]]
-dataset = pd.DataFrame(data, columns=['datetime', 'f1-f2', 'f2-f3', 'f3-f4'])
-
-
-def _windowing(signals):
+def _windowing(np_signals, annotations):
     print('\tWindowing...')
-    print(signals.__len__())
+    print(np_signals.__len__())
 
-    window_size = 200
-    overlap_size = window_size/2
+    window_size = 4  # 200
+    overlap_size = int(window_size/2)
 
-    for w in range(len(signals)):
-        window = signals.loc[w:window_size, :]
+    dataset = []
 
-    print(window, window.__len__())
+    # for w in range(0, len(signals), overlap_size):
+    for w in range(0, 10, overlap_size):
+        # window = np_signals.loc[w: w + window_size - 1, :]
+        window = np_signals[w: w + window_size - 1, 1:]
+
+        window_array = np.reshape(window, -1)
+        dataset.append((window_array, 'dada'))
+
+        # print('window: ', dataset)
+
+    for d in dataset:
+        print(d)
+
     print('\tWindowing...Done')
 
 
