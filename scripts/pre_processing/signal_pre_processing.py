@@ -86,16 +86,27 @@ def _re_sampling_with_shuffle(signals):
     return re_sampled_data
 
 
+data = [['1996/07/03 11:40:35', -23.3455, 24.5534, -325.653],
+        ['1996/07/03 11:40:35', 23.3465, -24.5444, 325.653],
+        ['1996/07/03 11:40:35', -23.3455, -24.5564, 325.653],
+        ['1996/07/03 11:40:36', 23.3455, 24.5534, 325.666],
+        ['1996/07/03 11:40:36', -23.3444, -24.5534, -3254.653],
+        ['1996/07/03 11:40:36', 23.3456, 24.5534, 325.653],
+        ['1996/07/03 11:40:36', -23.3455, 24.5534, -325.653]]
+dataset = pd.DataFrame(data, columns=['datetime', 'f1-f2', 'f2-f3', 'f3-f4'])
+
+
 def _windowing(signals):
     print('\tWindowing...')
-
     print(signals.__len__())
+
     window_size = 200
     overlap_size = window_size/2
 
-    window = np.kaiser(M=200, beta=0)
-    print(window, window.__len__())
+    for w in range(len(signals)):
+        window = signals.loc[w:window_size, :]
 
+    print(window, window.__len__())
     print('\tWindowing...Done')
 
 
