@@ -38,7 +38,7 @@ def _load_signals(file_name):
     print('\tLoad signals file...')
 
     # Load the signals from a file and save them into a DataFrame.
-    signals = pd.read_csv(file_name, sep=',', usecols=SIGNAL_COLUMNS, nrows=135000)
+    signals = pd.read_csv(file_name, sep='\t', usecols=SIGNAL_COLUMNS, nrows=135000)
 
     print('\tLoad signals file...Done')
     return signals

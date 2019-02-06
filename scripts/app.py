@@ -1,16 +1,17 @@
 from scripts.pre_processing.annotation_pre_processing import load_annotations
 from scripts.pre_processing.signal_pre_processing import load_signals
-from scripts.pre_processing.dataset_pre_processing import create_data_set
+from scripts.pre_processing.dataset_pre_processing import load_data_set
 from scripts.plots import *
 from scripts.model import *
 
 from datetime import datetime
 
-
-# ANNOTATIONS_TXT = 'D:\\liamylo\\Documents\\BSc Thesis\\Data\\Annotations\\n1.txt'
-ANNOTATIONS_TXT = 'C:\\Users\\emylonidou\\PycharmProjects\\CAP\\data\\n1.txt'
-# SIGNALS_CSV = 'D:\\liamylo\\Documents\\BSc Thesis\\Data\\Signals\\n1_512Hz.csv'
-SIGNALS_CSV = 'C:\\Users\\emylonidou\\PycharmProjects\\CAP\\data\\n1_512Hz.csv'
+# ========== HOME ==========
+ANNOTATIONS_TXT = 'D:\\liamylo\\Documents\\BSc Thesis\\Data\\Annotations\\n1.txt'
+SIGNALS_CSV = 'D:\\liamylo\\Documents\\BSc Thesis\\Data\\Signals\\n1_512Hz.csv'
+# ========== WORK ==========
+# ANNOTATIONS_TXT = 'C:\\Users\\emylonidou\\PycharmProjects\\CAP\\data\\n1.txt'
+# SIGNALS_CSV = 'C:\\Users\\emylonidou\\PycharmProjects\\CAP\\data\\n1_512Hz.csv'
 
 
 def main():
@@ -37,7 +38,7 @@ def main():
     #
 
     print('============================= DATA-SET ===============================')
-    data_set = create_data_set(signals=signals,
+    data_set = load_data_set(signals=signals,
                              annotations=annotations[['Datetime', 'Event', 'Duration[s]']])
     # plot_data_classes(data_set)
     # save_data_set(data_set)
