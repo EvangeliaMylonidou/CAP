@@ -7,11 +7,11 @@ from scripts.model import *
 from datetime import datetime
 
 # ========== HOME ==========
-ANNOTATIONS_TXT = 'D:\\liamylo\\Documents\\BSc Thesis\\Data\\Annotations\\n1.txt'
-SIGNALS_CSV = 'D:\\liamylo\\Documents\\BSc Thesis\\Data\\Signals\\n1_512Hz.csv'
+# ANNOTATIONS_TXT = 'D:\\liamylo\\Documents\\BSc Thesis\\Data\\Annotations\\n1.txt'
+# SIGNALS_CSV = 'D:\\liamylo\\Documents\\BSc Thesis\\Data\\Signals\\n1_512Hz.csv'
 # ========== WORK ==========
-# ANNOTATIONS_TXT = 'C:\\Users\\emylonidou\\PycharmProjects\\CAP\\data\\n1.txt'
-# SIGNALS_CSV = 'C:\\Users\\emylonidou\\PycharmProjects\\CAP\\data\\n1_512Hz.csv'
+ANNOTATIONS_TXT = 'C:\\Users\\emylonidou\\PycharmProjects\\CAP\\data\\n1.txt'
+SIGNALS_CSV = 'C:\\Users\\emylonidou\\PycharmProjects\\CAP\\data\\n1_512Hz.csv'
 
 
 def main():
