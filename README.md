@@ -1,4 +1,3 @@
-.
 # CAP - Cyclic Alternating Pattern
 
 A thesis project for the identification and classification of the sleep micro-structure, by using machine learning methods.
@@ -34,3 +33,7 @@ pip install mne
 ```
 python app.py
 ```
+
+### Dataset
+
+https://physionet.org/content/capslpdb/1.0.0/
