@@ -1,3 +1,8 @@
+# Model needs to be more like: https://github.com/CVxTz/EEG_classification
+# CNN-CNN : F1 = 0.81, ACCURACY = 0.87
+# CNN-CNN-CRF : F1 = 0.82, ACCURACY =0.89
+# CNN-LSTM : F1 = 0.71, ACCURACY = 0.76
+
 import sklearn.model_selection as sk
 from keras.models import Sequential
 from keras.layers import Conv1D, MaxPooling1D, Dense
